@@ -1,0 +1,11 @@
+pdfplumber
+pymupdf
+pytesseract
+pdf2image
+sentence-transformers
+qdrant-client
+fastapi
+uvicorn
+pydantic
+numpy
+tqdm
