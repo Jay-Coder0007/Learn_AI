@@ -3,6 +3,7 @@ import re
 import json
 from ftfy import fix_text
 
+
 def get_path(class_dir, subject, filename):
     path = os.path.join("processed", class_dir, subject)
     os.makedirs(path, exist_ok=True)
@@ -20,9 +21,11 @@ def load_text(class_dir, subject, filename):
         print(f"❌ Error loading {class_dir}/{subject}/{filename}: {e}")
         return ""
 
-def save_json(class_dir, subject, filename, data):
-    with open(get_path(class_dir, subject, filename), "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)  # Keep Unicode
+def save_json(file_path, data):
+    """Save data as JSON to a given file path"""
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 def load_json(class_dir, subject, filename):
     return json.load(open(get_path(class_dir, subject, filename), "r", encoding="utf-8"))

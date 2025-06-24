@@ -2,23 +2,71 @@
 
 
 
+# import os
+# from helpers import load_text, save_json, chunk_text
+
+# def run_chunking():
+#     if not os.path.exists("processed"):
+#         print("❌ Folder 'processed' not found.")
+#         return
+
+#     for class_dir in sorted(os.listdir("processed")):
+#         class_path = os.path.join("processed", class_dir)
+#         if not os.path.isdir(class_path): continue
+
+#         for subject in sorted(os.listdir(class_path)):
+#             subject_path = os.path.join(class_path, subject)
+#             if not os.path.isdir(subject_path): continue
+
+#             cleaned = load_text(class_dir, subject, "clean.txt")
+#             if not cleaned.strip():
+#                 print(f"⚠️ Empty clean.txt: {class_dir}/{subject}")
+#                 continue
+
+#             chunks = chunk_text(cleaned, max_len=100)
+#             if not chunks:
+#                 print(f"⚠️ No chunks created: {class_dir}/{subject}")
+#                 continue
+
+#             save_json(class_dir, subject, "chunks.json", chunks)
+#             print(f"✅ {class_dir}/{subject} → {len(chunks)} chunks")
+
+# if __name__ == "__main__":
+#     run_chunking()
+
+
+
 import os
 from helpers import load_text, save_json, chunk_text
 
 def run_chunking():
-    if not os.path.exists("processed"):
+    # Resolve the base project directory
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+    processed_root = os.path.join(base_dir, "processed")
+
+    if not os.path.exists(processed_root):
         print("❌ Folder 'processed' not found.")
         return
 
-    for class_dir in sorted(os.listdir("processed")):
-        class_path = os.path.join("processed", class_dir)
-        if not os.path.isdir(class_path): continue
+    for class_dir in sorted(os.listdir(processed_root)):
+        class_path = os.path.join(processed_root, class_dir)
+        if not os.path.isdir(class_path):
+            continue
 
         for subject in sorted(os.listdir(class_path)):
             subject_path = os.path.join(class_path, subject)
-            if not os.path.isdir(subject_path): continue
+            if not os.path.isdir(subject_path):
+                continue
 
-            cleaned = load_text(class_dir, subject, "clean.txt")
+            # Load the cleaned text
+            cleaned_path = os.path.join(subject_path, "clean.txt")
+            try:
+                with open(cleaned_path, 'r', encoding='utf-8') as f:
+                    cleaned = f.read()
+            except Exception as e:
+                print(f"❌ Error reading: {class_dir}/{subject}/clean.txt → {e}")
+                continue
+
             if not cleaned.strip():
                 print(f"⚠️ Empty clean.txt: {class_dir}/{subject}")
                 continue
@@ -28,11 +76,14 @@ def run_chunking():
                 print(f"⚠️ No chunks created: {class_dir}/{subject}")
                 continue
 
-            save_json(class_dir, subject, "chunks.json", chunks)
+            # Save chunks as JSON in the same subject folder
+            json_path = os.path.join(subject_path, "chunks.json")
+            save_json(json_path, chunks)
             print(f"✅ {class_dir}/{subject} → {len(chunks)} chunks")
 
 if __name__ == "__main__":
     run_chunking()
+
 
 
 
