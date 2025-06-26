@@ -572,7 +572,7 @@ if utils_dir not in sys.path:
     sys.path.insert(0, utils_dir)
 
 # ✅ Directly import from same folder
-from qdrant_config import qdrant
+from app.utils.qdrant_config import qdrant
 from schema import Metadata
 
 # === Constants ===

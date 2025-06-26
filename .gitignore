@@ -20,5 +20,5 @@ embeddings/
 .idea/
 
 # System files
-.DS_Store
+data/
 Thumbs.db
